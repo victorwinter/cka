@@ -1,1 +1,16 @@
+Para a prática do cenário de Cluster Architecture, Installation & Configuration da certificação Certified Kubernetes Administrator (CKA), este repositório utilizará duas máquinas virtuais (VMs) provisionadas na AWS (Amazon Web Services), com a configuração t2.medium. 
+Esse ambiente simula um cenário de cluster Kubernetes com dois nós, um provisionado para configurações e elementos do control-plane e outro relacionado ao worker node.
+
+Detalhes da configuração:
+- Plataforma: AWS (Amazon Web Services).
+- Tipo de Instância: 2 máquinas virtuais com o tipo de instância t2.medium 2vCpu e 4Gb de Memória.
+- Sistema operacional: Ubuntu Server 22.04 LTS 64 Bit.
+- Uso: Uma máquina virtual será configurada como Master Node, e a outra como Worker Node.
+- Crie um novo Security Group (SG) para as instâncias do Kubernetes, garantindo que ele permita o acesso SSH (porta 22) de sua máquina local (ou de um intervalo de IPs seguro).
+- Storage 30GiB
+- Crie uma chave SSH para posterior conexão utilizando sua máquina local com um terminal de sua preferência
+- Durante a criação das máquinas EC2, copie o id gerado pelo security group e acesse a seção de Edit Inbound Rules
+- Clique em Add Rule, em type selecione 'All traffic' e em source selecione o id do próprio security group que havia copiado.
+Obs.: Ressalta-se que essa não é a melhor opção, porém para exemplificação do cenário da prova essa liberação será necessária, essa liberação não deve ser utilizada em um ambiente de produção.
+
 
