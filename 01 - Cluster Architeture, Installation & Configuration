@@ -1,7 +1,8 @@
 Cluster Architeture, Installation & Configuration
 
 Para a prática do cenário de Cluster Architecture, Installation & Configuration da certificação Certified Kubernetes Administrator (CKA), este repositório utilizará duas máquinas virtuais (VMs) provisionadas na AWS (Amazon Web Services), com a configuração t2.medium. 
-Esse ambiente simula um cenário de cluster Kubernetes com dois nós, um provisionado para configurações e elementos do control-plane e outro relacionado ao worker node.
+Esse ambiente simula um cenário de cluster Kubernetes com dois nós, um provisionado para configurações e elementos do control-plane e outro relacionado ao worker node
+Será utilizado o kubeadm para configurar e gerenciar o cluster Kubernetes. Isso é feito porque o kubeadm é uma das ferramentas e abordagens oficialmente cobradas no exame CKA.
 
 Esse cenário é parte do exame CKA descrito no curriculum definido pela Cloud Native Compunting Foundation (CNCF)
 https://github.com/cncf/curriculum/blob/master/CKA_Curriculum_v1.31.pdf
@@ -25,6 +26,99 @@ Conectando nas máquinas EC2:
 - Conceda a permissao chmo 400 para a chave que está no diretório.
 - Realize uma conexão ssh na máquina definida como control-plane
 'ssh ubuntu@ip-do-host -i chave.pem'
+
+Para esse primeiro cenário, iremos seguir a documentação oficial do Kubernetes adicionando a versão v1.31 para posteriormente executarmos a atualização.
+https://v1-31.docs.kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
+
+Conectado na máquina EC2 control plane, execute os comandos abaixos conforme descrito na documentação oficial para instalação dos componentes:
+1 - sudo apt-get update
+    sudo apt-get install -y apt-transport-https ca-certificates curl gpg
+2 - curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+3 - echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+4 - sudo apt-get update
+    sudo apt-get install -y kubelet kubeadm kubectl
+    sudo apt-mark hold kubelet kubeadm kubectl #comando utilizado para marcar os componentes kubeadm,kubelet e kubectl de modo que eles não sofram atualizações.
+
+5 - sudo systemctl enable --now kubelet
+
+Containerd:
+Para a configuração do Kubernetes neste cenário, o containerd será utilizado como o runtime de contêineres. 
+O containerd é uma parte essencial do ecossistema Kubernetes, responsável pela execução e gerenciamento de contêineres.
+Embora o containerd seja um componente fundamental para o funcionamento do Kubernetes, é importante ressaltar que a configuração do containerd não será cobrada no exame CKA, pois ele já virá pré-configurado em muitas distribuições e ambientes Kubernetes.
+O objetivo de demonstrar a configuração além de melhor entendimento e aprofundamento no cenário é mostrar como é executada.
+Abaixo a sequência de comandos que deverão ser utilizados:
+
+1 - Ativar dois módulos de kernel: Overlay e br_netfilter
+cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
+overlay
+br_netfilter
+EOF
+
+2 - Carregue os dois módulos
+sudo modprobe overlay
+sudo modprobe br_netfilter
+
+3 - Habilitando algumas flags, ex: ipforward, netbridge
+Crie um arquivo no caminho: /etc/sysctl.d/kubernetes.conf
+Edite o arquivo e insira o conteúdo:
+net.ipv4.ip_forward = 1
+net.ipv4.conf.all.forwarding = 1
+net.ipv6.conf.all.forwarding = 1
+net.bridge.bridge-nf-call-iptables  = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.ipv4.conf.all.rp_filter = 0
+net.ipv6.conf.all.rp_filter = 0
+
+4 - Após inserir o conteúdo e salvar o arquivo, execute o comando para carregar os módulos/flags:
+sudo sysctl --system
+
+5 - Instalação containerd
+apt install -y containerd
+mkdir -p /etc/containerd
+
+6 - Gere o arquivo de configuração padrão do containerd e redirecione a saída para um arquivo config.toml
+containerd config default>/etc/containerd/config.toml
+
+7 - Altere o valor do conteúdo config.toml modificando o valor SystemdCgroup para true, para isso, pode-se utilizar o comando abaixo para substituir todos os valores:
+sed -i 's/SystemdCgroup.*/SystemdCgroup = true/g' /etc/containerd/config.toml
+
+8 - Inicie o containerd
+systemctl enable containerd
+systemctl start containerd
+systemctl status containerd
+
+Pré-requisitos instalados.
+
+Kubeadm Init:
+https://v1-31.docs.kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/
+
+1 - Após executar todos os passos anteriores e certificar de que os serviços estão instalados e em execução conforme esperado.
+Iremos inicializar o master node de um cluster Kubernetes, configurando o plano de controle, criando os certificados necessários e gerando o comando para adicionar nós de trabalho (worker nodes) ao cluster, utilize o comando:
+kubeadm init
+
+2 - Finalizando a criação do cluster com o comando kubeadm init, execute os comandos solicitados na finalização do processo para a conclusão:
+Your Kubernetes control-plane has initialized successfully!
+
+To start using your cluster, you need to run the following as a regular user:
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+You should now deploy a Pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  /docs/concepts/cluster-administration/addons/
+
+You can now join any number of machines by running the following on each node
+as root:
+
+  kubeadm join <control-plane-host>:<control-plane-port> --token <token> --discovery-token-ca-cert-hash sha256:<hash>
+
+
+
+
 
 
 
