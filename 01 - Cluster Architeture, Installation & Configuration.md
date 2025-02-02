@@ -1,4 +1,4 @@
-#**Cluster Architeture, Installation & Configuration**
+**Cluster Architeture, Installation & Configuration**
 
 Para a prática do cenário de Cluster Architecture, Installation & Configuration da certificação Certified Kubernetes Administrator (CKA), este repositório utilizará duas máquinas virtuais (VMs) provisionadas na AWS (Amazon Web Services), com a configuração t2.medium. 
 Esse ambiente simula um cenário de cluster Kubernetes com dois nós, um provisionado para configurações e elementos do control-plane e outro relacionado ao worker node
@@ -7,7 +7,7 @@ Será utilizado o kubeadm para configurar e gerenciar o cluster Kubernetes. Isso
 Esse cenário é parte do exame CKA descrito no curriculum definido pela Cloud Native Compunting Foundation (CNCF)
 https://github.com/cncf/curriculum/blob/master/CKA_Curriculum_v1.31.pdf
 
-Detalhes da configuração:
+**Detalhes da configuração:**
 - Plataforma: AWS (Amazon Web Services).
 - Tipo de Instância: 2 máquinas virtuais com o tipo de instância t2.medium 2vCpu e 4Gb de Memória.
 - Sistema operacional: Ubuntu Server 22.04 LTS 64 Bit.
@@ -20,7 +20,7 @@ Detalhes da configuração:
 Obs.: Ressalta-se que essa não é a melhor opção, porém para exemplificação do cenário da prova essa liberação será necessária, essa liberação não deve ser utilizada em um ambiente de produção.
 - Renomeie as máquinas de forma que uma seja seu control-plane e outra o worker-node, nesse cenário as máquinas terão os nomes cka-control-plane e cka-node
 
-Conectando nas máquinas EC2:
+**Conectando nas máquinas EC2:**
 - Após realizar o download da chave (.pem) gerada pela console aws 
 - Copie a chave para um diretório de sua preferência
 - Conceda a permissao chmo 400 para a chave que está no diretório.
@@ -43,7 +43,7 @@ Conectado na máquina EC2 control plane, execute os comandos abaixos conforme de
 
 5 - sudo systemctl enable --now kubelet
 
-Containerd:
+**Containerd:**
 Para a configuração do Kubernetes neste cenário, o containerd será utilizado como o runtime de contêineres. 
 O containerd é uma parte essencial do ecossistema Kubernetes, responsável pela execução e gerenciamento de contêineres.
 Embora o containerd seja um componente fundamental para o funcionamento do Kubernetes, é importante ressaltar que a configuração do containerd não será cobrada no exame CKA, pois ele já virá pré-configurado em muitas distribuições e ambientes Kubernetes.
@@ -91,7 +91,7 @@ systemctl status containerd
 
 Pré-requisitos instalados.
 
-Kubeadm Init:
+**Kubeadm Init:**
 https://v1-31.docs.kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/
 
 1 - Após executar todos os passos anteriores e certificar de que os serviços estão instalados e em execução conforme esperado.
@@ -103,7 +103,7 @@ mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-Container Network Interface (CNI)
+**Container Network Interface (CNI)**
 
 A instalação da CNI em si, não é cobrada na prova de ceritificação, se houver algo relacionado, todos os comandos necessários e os steps serão informados durante a prova.
 Para que nosso node criado nos passos anteriores fique com status de Ready, será necessário realizar a configuração da CNI
