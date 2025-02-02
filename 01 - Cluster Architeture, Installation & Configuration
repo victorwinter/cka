@@ -1,5 +1,10 @@
+Cluster Architeture, Installation & Configuration
+
 Para a prática do cenário de Cluster Architecture, Installation & Configuration da certificação Certified Kubernetes Administrator (CKA), este repositório utilizará duas máquinas virtuais (VMs) provisionadas na AWS (Amazon Web Services), com a configuração t2.medium. 
 Esse ambiente simula um cenário de cluster Kubernetes com dois nós, um provisionado para configurações e elementos do control-plane e outro relacionado ao worker node.
+
+Esse cenário é parte do exame CKA descrito no curriculum definido pela Cloud Native Compunting Foundation (CNCF)
+https://github.com/cncf/curriculum/blob/master/CKA_Curriculum_v1.31.pdf
 
 Detalhes da configuração:
 - Plataforma: AWS (Amazon Web Services).
@@ -12,5 +17,14 @@ Detalhes da configuração:
 - Durante a criação das máquinas EC2, copie o id gerado pelo security group e acesse a seção de Edit Inbound Rules
 - Clique em Add Rule, em type selecione 'All traffic' e em source selecione o id do próprio security group que havia copiado.
 Obs.: Ressalta-se que essa não é a melhor opção, porém para exemplificação do cenário da prova essa liberação será necessária, essa liberação não deve ser utilizada em um ambiente de produção.
+- Renomeie as máquinas de forma que uma seja seu control-plane e outra o worker-node, nesse cenário as máquinas terão os nomes cka-control-plane e cka-node
+
+Conectando nas máquinas EC2:
+- Após realizar o download da chave (.pem) gerada pela console aws 
+- Copie a chave para um diretório de sua preferência
+- Conceda a permissao chmo 400 para a chave que está no diretório.
+- Realize uma conexão ssh na máquina definida como control-plane
+'ssh ubuntu@ip-do-host -i chave.pem'
+
 
 
