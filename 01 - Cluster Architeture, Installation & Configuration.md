@@ -23,7 +23,7 @@ Obs.: Ressalta-se que essa não é a melhor opção, porém para exemplificaçã
 **Conectando nas máquinas EC2:**
 - Após realizar o download da chave (.pem) gerada pela console aws 
 - Copie a chave para um diretório de sua preferência
-- Conceda a permissao chmo 400 para a chave que está no diretório.
+- Conceda a permissao chmod 400 para a chave que está no diretório.
 - Realize uma conexão ssh na máquina definida como control-plane
 'ssh ubuntu@ip-do-host -i chave.pem'
 
