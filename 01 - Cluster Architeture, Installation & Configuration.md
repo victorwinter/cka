@@ -31,18 +31,23 @@ Para esse primeiro cenário, iremos seguir a documentação oficial do Kubernete
 [https://v1-31.docs.kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/]
 
 Conectado na máquina EC2 control plane, execute os comandos abaixos conforme descrito na documentação oficial para instalação dos componentes:
-1 - sudo apt-get update
-    sudo apt-get install -y apt-transport-https ca-certificates curl gpg
+1. 
+- sudo apt-get update
+- sudo apt-get install -y apt-transport-https ca-certificates curl gpg
     
-2 - curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+2. 
+- curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 
-3 - echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+3. 
+- echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
-4 - sudo apt-get update
-    sudo apt-get install -y kubelet kubeadm kubectl
-    sudo apt-mark hold kubelet kubeadm kubectl #comando utilizado para marcar os componentes kubeadm,kubelet e kubectl de modo que eles não sofram atualizações.
+4. 
+- sudo apt-get update
+- sudo apt-get install -y kubelet kubeadm kubectl
+- sudo apt-mark hold kubelet kubeadm kubectl #comando utilizado para marcar os componentes kubeadm,kubelet e kubectl de modo que eles não sofram atualizações.
 
-5 - sudo systemctl enable --now kubelet
+5.
+- sudo systemctl enable --now kubelet
 
 **Containerd:**
 Para a configuração do Kubernetes neste cenário, o containerd será utilizado como o runtime de contêineres. 
@@ -57,11 +62,11 @@ overlay
 br_netfilter
 EOF
 
-2 - Carregue os dois módulos
-sudo modprobe overlay
-sudo modprobe br_netfilter
+2. Carregue os dois módulos
+- sudo modprobe overlay
+- sudo modprobe br_netfilter
 
-3 - Habilitando algumas flags, ex: ipforward, netbridge
+3. Habilitando algumas flags, ex: ipforward, netbridge
 Crie um arquivo no caminho: /etc/sysctl.d/kubernetes.conf
 Edite o arquivo e insira o conteúdo:
 net.ipv4.ip_forward = 1
@@ -72,37 +77,37 @@ net.bridge.bridge-nf-call-ip6tables = 1
 net.ipv4.conf.all.rp_filter = 0
 net.ipv6.conf.all.rp_filter = 0
 
-4 - Após inserir o conteúdo e salvar o arquivo, execute o comando para carregar os módulos/flags:
-sudo sysctl --system
+4. Após inserir o conteúdo e salvar o arquivo, execute o comando para carregar os módulos/flags:
+- sudo sysctl --system
 
-5 - Instalação containerd
-apt install -y containerd
-mkdir -p /etc/containerd
+5. Instalação containerd
+- apt install -y containerd
+- mkdir -p /etc/containerd
 
-6 - Gere o arquivo de configuração padrão do containerd e redirecione a saída para um arquivo config.toml
-containerd config default>/etc/containerd/config.toml
+6. Gere o arquivo de configuração padrão do containerd e redirecione a saída para um arquivo config.toml
+- containerd config default>/etc/containerd/config.toml
 
-7 - Altere o valor do conteúdo config.toml modificando o valor SystemdCgroup para true, para isso, pode-se utilizar o comando abaixo para substituir todos os valores:
-sed -i 's/SystemdCgroup.*/SystemdCgroup = true/g' /etc/containerd/config.toml
+7. Altere o valor do conteúdo config.toml modificando o valor SystemdCgroup para true, para isso, pode-se utilizar o comando abaixo para substituir todos os valores:
+- sed -i 's/SystemdCgroup.*/SystemdCgroup = true/g' /etc/containerd/config.toml
 
-8 - Inicie o containerd
-systemctl enable containerd
-systemctl start containerd
-systemctl status containerd
+8. Inicie o containerd
+- systemctl enable containerd
+- systemctl start containerd
+- systemctl status containerd
 
 Pré-requisitos instalados.
 
 **Kubeadm Init:**
 [https://v1-31.docs.kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/]
 
-1 - Após executar todos os passos anteriores e certificar de que os serviços estão instalados e em execução conforme esperado.
+1. Após executar todos os passos anteriores e certificar de que os serviços estão instalados e em execução conforme esperado.
 Iremos inicializar o master node de um cluster Kubernetes, configurando o plano de controle, criando os certificados necessários e gerando o comando para adicionar nós de trabalho (worker nodes) ao cluster, utilize o comando:
-kubeadm init
+- kubeadm init
 
-2 - Finalizando a criação do cluster com o comando kubeadm init, execute os comandos solicitados na finalização do processo para a conclusão:
-mkdir -p $HOME/.kube
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-sudo chown $(id -u):$(id -g) $HOME/.kube/config
+2. Finalizando a criação do cluster com o comando kubeadm init, execute os comandos solicitados na finalização do processo para a conclusão:
+- mkdir -p $HOME/.kube
+- sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+- sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 **Container Network Interface (CNI)**
 
@@ -111,7 +116,7 @@ Para que nosso node criado nos passos anteriores fique com status de Ready, ser�
 
 Iremos utilizar a documentação da Cilium [https://docs.cilium.io/en/v1.14/installation/k8s-install-kubeadm/#installation-using-kubeadm]
 
-1 - Copie e execute o comando para baixar e instalar o binário da Cilium:
+1. Copie e execute o comando para baixar e instalar o binário da Cilium:
 CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli/main/stable.txt)
 CLI_ARCH=amd64
 if [ "$(uname -m)" = "aarch64" ]; then CLI_ARCH=arm64; fi
@@ -120,11 +125,11 @@ sha256sum --check cilium-linux-${CLI_ARCH}.tar.gz.sha256sum
 sudo tar xzvfC cilium-linux-${CLI_ARCH}.tar.gz /usr/local/bin
 rm cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum}
 
-2 - Execute a instalação
-cilium install
+2. Execute a instalação
+- cilium install
 
-3 - Verifique o status da instalação
-cilium status
+3. Verifique o status da instalação
+- cilium status
 
-4 - Verifique se o node está disponível (Ready)
-kubectl get node
+4. Verifique se o node está disponível (Ready)
+- kubectl get node
