@@ -5,7 +5,7 @@ Esse ambiente simula um cenário de cluster Kubernetes com dois nós, um provisi
 Será utilizado o kubeadm para configurar e gerenciar o cluster Kubernetes. Isso é feito porque o kubeadm é uma das ferramentas e abordagens oficialmente cobradas no exame CKA.
 
 Esse cenário é parte do exame CKA descrito no curriculum definido pela Cloud Native Compunting Foundation (CNCF)
-https://github.com/cncf/curriculum/blob/master/CKA_Curriculum_v1.31.pdf
+[https://github.com/cncf/curriculum/blob/master/CKA_Curriculum_v1.31.pdf]
 
 **Detalhes da configuração:**
 - Plataforma: AWS (Amazon Web Services).
@@ -28,11 +28,12 @@ Obs.: Ressalta-se que essa não é a melhor opção, porém para exemplificaçã
 'ssh ubuntu@ip-do-host -i chave.pem'
 
 Para esse primeiro cenário, iremos seguir a documentação oficial do Kubernetes adicionando a versão v1.31 para posteriormente executarmos a atualização.
-https://v1-31.docs.kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
+[https://v1-31.docs.kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/]
 
 Conectado na máquina EC2 control plane, execute os comandos abaixos conforme descrito na documentação oficial para instalação dos componentes:
 1 - sudo apt-get update
     sudo apt-get install -y apt-transport-https ca-certificates curl gpg
+    
 2 - curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 
 3 - echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
@@ -92,7 +93,7 @@ systemctl status containerd
 Pré-requisitos instalados.
 
 **Kubeadm Init:**
-https://v1-31.docs.kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/
+[https://v1-31.docs.kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/]
 
 1 - Após executar todos os passos anteriores e certificar de que os serviços estão instalados e em execução conforme esperado.
 Iremos inicializar o master node de um cluster Kubernetes, configurando o plano de controle, criando os certificados necessários e gerando o comando para adicionar nós de trabalho (worker nodes) ao cluster, utilize o comando:
@@ -108,7 +109,7 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 A instalação da CNI em si, não é cobrada na prova de ceritificação, se houver algo relacionado, todos os comandos necessários e os steps serão informados durante a prova.
 Para que nosso node criado nos passos anteriores fique com status de Ready, será necessário realizar a configuração da CNI
 
-Iremos utilizar a documentação da Cilium https://docs.cilium.io/en/v1.14/installation/k8s-install-kubeadm/#installation-using-kubeadm
+Iremos utilizar a documentação da Cilium [https://docs.cilium.io/en/v1.14/installation/k8s-install-kubeadm/#installation-using-kubeadm]
 
 1 - Copie e execute o comando para baixar e instalar o binário da Cilium:
 CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli/main/stable.txt)
