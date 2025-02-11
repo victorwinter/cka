@@ -31,6 +31,7 @@ Para esse primeiro cenário, iremos seguir a documentação oficial do Kubernete
 [https://v1-31.docs.kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/]
 
 Conectado na máquina EC2 control plane, execute os comandos abaixos conforme descrito na documentação oficial para instalação dos componentes:
+
 1. 
 - sudo apt-get update
 - sudo apt-get install -y apt-transport-https ca-certificates curl gpg
