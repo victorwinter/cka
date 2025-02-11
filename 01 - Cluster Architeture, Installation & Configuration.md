@@ -58,6 +58,7 @@ O objetivo de demonstrar a configuração além de melhor entendimento e aprofun
 Abaixo a sequência de comandos que deverão ser utilizados:
 
 1 - Ativar dois módulos de kernel: Overlay e br_netfilter
+
 cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
 overlay
 br_netfilter
@@ -68,8 +69,12 @@ EOF
 - sudo modprobe br_netfilter
 
 3. Habilitando algumas flags, ex: ipforward, netbridge
-Crie um arquivo no caminho: /etc/sysctl.d/kubernetes.conf
+Crie um arquivo no caminho:
+
+/etc/sysctl.d/kubernetes.conf
+
 Edite o arquivo e insira o conteúdo:
+
 net.ipv4.ip_forward = 1
 net.ipv4.conf.all.forwarding = 1
 net.ipv6.conf.all.forwarding = 1
@@ -78,7 +83,7 @@ net.bridge.bridge-nf-call-ip6tables = 1
 net.ipv4.conf.all.rp_filter = 0
 net.ipv6.conf.all.rp_filter = 0
 
-4. Após inserir o conteúdo e salvar o arquivo, execute o comando para carregar os módulos/flags:
+5. Após inserir o conteúdo e salvar o arquivo, execute o comando para carregar os módulos/flags:
 - sudo sysctl --system
 
 5. Instalação containerd
