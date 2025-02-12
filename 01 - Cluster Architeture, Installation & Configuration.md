@@ -304,4 +304,10 @@ Realizar o procedimento de update dos componentes kubeadm, kubelet e kubectl na 
 
 - Atualização finalizada
 
+Desconecte da máquina worker-node e retorne na vm control-plane para retirarmos o modo de manutenção que foi setado com o comando `kubectl drain`.
+Para isso, execute o comando `kubectl uncordon nome-do-node`
+Após finalizar a execução do comando, você pode conferir se a label `SchedullingDisable` foi removida com o comando `kubectl get node`
+
+Para finalizar, crie um pod de teste para garantir que ele será executado após as atualizações realizadas:
+`kubectl run nginx --image nginx`
 
